@@ -2,7 +2,7 @@ package authentication;
 
 /**
  * These are used to represent the possible errors that can occur when creating
- * a user name.
+ * a username.
  * 
  * @author Nils
  *

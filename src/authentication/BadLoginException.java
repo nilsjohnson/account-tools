@@ -23,7 +23,7 @@ public class BadLoginException extends Exception
 			message = "Invalid Password";
 			break;
 		case NO_USERS:
-			message = "No Accounts Exist. Make a new one!";
+			message = "No Accounts Exist.";
 			break;
 		case USER_NOT_FOUND:
 			message = "User Not Found";
@@ -48,7 +48,8 @@ public class BadLoginException extends Exception
 		return this.loginError;
 	}
 
-	public String getLoginErrorMessage()
+	@Override
+	public String getMessage()
 	{
 		return this.message;
 	}

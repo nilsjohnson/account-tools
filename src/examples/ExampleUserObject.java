@@ -1,12 +1,13 @@
-package test;
+package examples;
 
 import java.io.Serializable;
 
 import authentication.IsetUser;
 
 /**
- * This class demonstrates how to extend user. Since User is serialized,
- * remember that members of this class must also implement serializable.
+ * This class demonstrates how to implement IsetUser. 
+ * This class must hold the username.
+ * Do not put the password in this class.
  * 
  * @author Nils Johnson
  */

@@ -17,16 +17,16 @@ import authentication.EncryptionFilter;
 
 import authentication.NewUserException;
 
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Accesses the User table.
  * 
  * @author Nils Johnson
  */
-// TODO - Try with resources for each call, instead of try-catch-finally
+
 public class UserDAO <T extends IsetUser> extends DAO implements IUserDAO<T>
 {
 
@@ -40,12 +40,6 @@ public class UserDAO <T extends IsetUser> extends DAO implements IUserDAO<T>
 		super();
 	}
 
-	/**
-	 * This method inserts a user into the SQLite database
-	 * 
-	 * @throws IOException
-	 * @throws FileNotFoundException
-	 */
 	@Override
 	public void createUser (String enteredUsername, String enteredPassword, String enteredPwConfirm, Object object) throws NewUserException
 	{
@@ -131,8 +125,6 @@ public class UserDAO <T extends IsetUser> extends DAO implements IUserDAO<T>
 		{
 			closeConnection();
 		}
-
-		
 	}
 
 	@Override
@@ -238,7 +230,6 @@ public class UserDAO <T extends IsetUser> extends DAO implements IUserDAO<T>
 		}
 		catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally
@@ -286,18 +277,17 @@ public class UserDAO <T extends IsetUser> extends DAO implements IUserDAO<T>
 		}
 	}
 
-
 	@Override
 	public void saveUserObject(T object)
 	{
 		try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(object.getUsername() + ".dat"));)
 		{
 			output.writeObject(object);
+			System.out.println("File save success for " + object.getUsername());
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}	
 	}
-
 }

@@ -1,5 +1,4 @@
-package test;
-
+package examples;
 
 import java.util.ArrayList;
 
@@ -10,16 +9,12 @@ import authentication.NewUserException;
 import authentication.PasswordError;
 import authentication.UsernameError;
 
-
-
-public class AuthenticatorTest
+public class AuthenticatorExample
 {
-
 	/**
-	 * This program demonstrates usage of the Authenticator object
+	 * This program demonstrates proper usage of the Authenticator object
 	 * 
 	 * @author Nils Johnson
-	 * @param args
 	 */
 	public static void main(String[] args)
 	{
@@ -27,9 +22,9 @@ public class AuthenticatorTest
 		// ExampleUserObject
 		Authenticator<ExampleUserObject> authenticator = new Authenticator<>();
 
-		// sample login credentials
-		final String USERNAME = "Bryndlle";
-		final String PASSWORD = "Pass123sd&";
+		// sample login credentials. Change these to experiment.
+		final String USERNAME = "Dave";
+		final String PASSWORD = "!Pass123";
 
 		// if desired, you may validate legality of username and password using
 		// Authenticator's static methods
@@ -43,38 +38,46 @@ public class AuthenticatorTest
 			// this is where you should call authenticator.createUser to prevent a frivolous
 			// database call.
 		}
-		else if (pwErrorList != null)
+		if (pwErrorList != null)
 		{
-			System.out.println("Password Issues:\n");
+			System.out.println("Password Issues:");
 			for (PasswordError error : pwErrorList)
 			{
 				System.out.println(error.toString());
 			}
 		}
-		else if (usernameErrorList != null)
+		if (usernameErrorList != null)
 		{
-			System.out.println("Username Issues:\n");
+			System.out.println("Username Issues:");
 			for (UsernameError error : usernameErrorList)
 			{
 				System.out.println(error.toString());
 			}
 		}
 
+		System.out.println("===========================");
+		
+		//////////////////////////////////////
 		// --------Making a new user -------//
+		//////////////////////////////////////
 		try
 		{
 			// create an Object to associate with user.
 			ExampleUserObject example = new ExampleUserObject(USERNAME, "Blue", 12.9);
 
 			// create this user.
-			authenticator.createUser(USERNAME, PASSWORD, PASSWORD, null);
+			authenticator.createUser(USERNAME, PASSWORD, PASSWORD, example);
+			System.out.println("Making of user entry and object successful.");
 		}
 		// catch any NewUserExceptions
 		catch (NewUserException e)
 		{
-			// getErrors returns an array of Enums representing the problems.
+			// get an array of Enums representing the problems and a message.
 			Enum<?>[] errors = e.getErrors();
-
+			String message = e.getMessage();
+			
+			System.out.println(message);
+			
 			for (Enum<?> error : errors)
 			{
 				if (error instanceof PasswordError)
@@ -125,9 +128,12 @@ public class AuthenticatorTest
 
 		}
 		
+		System.out.println("===========================");
 		
-		// --------Getting a user's object back -------
-
+		/////////////////////////////////////
+		//------Getting user's Object------//
+		/////////////////////////////////////
+		
 		// user's object
 		ExampleUserObject object = null;
 
@@ -135,9 +141,11 @@ public class AuthenticatorTest
 		{
 			// if valid credentials are entered, retrieves object.
 			object = (ExampleUserObject) authenticator.getUser(USERNAME, PASSWORD);
+			System.out.println("Object retrival successful");
 		}
 		catch (BadLoginException ex)
 		{	
+			// exception handing examples
 			LoginError error = ex.getError();
 			String errorMessage = ex.getMessage();
 			
@@ -158,13 +166,19 @@ public class AuthenticatorTest
 				break;
 			}
 		}
+		
+		System.out.println("===========================");
 
-		// now that you've fetched your user's object, do whatever with it.
+		/////////////////////////////////////////
+		//------Saving the user's object ------//
+		/////////////////////////////////////////
+		
+		// if you've succesfully fetched your user's object, do whatever with it.
 		object.favoriteColor = "Orange";
 		object.favoriteNumber = 832.567;
 
 		// when it's time, simply save it. 
-		authenticator.saveUser(object);
+		authenticator.saveUserObject(object);
 		
 		// and if you need to, you can delete this user and their object
 		authenticator.deleteUser(object);

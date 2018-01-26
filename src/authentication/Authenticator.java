@@ -3,35 +3,37 @@ package authentication;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 /**
- * This class sets requirements for usernames/passwords and defines methods for validating conformity. 
+ * This class sets requirements for usernames/passwords and defines methods for
+ * validating conformity.
+ * 
  * @author Nils Johnson
  *
  */
-public class Authenticator <T extends IsetUser>
+public class Authenticator<T extends IsetUser>
 {
-	public UserDAO<T> userDAO;
-	
+	private UserDAO<T> userDAO;
+
 	public static final char[] LEGAL_PW_SPECIAL_CHARACTER = { '!', '@', '#', '$', '^', '&', '*' };
-	
-	// if setting MIN_PW_LENGTH higher, verify that existing users will not be
-	// refused login - see UserDAO.getUser
+	public static final char[] ILLEGAL_NAME_CHARACTER = { ' ', '#', '%', '^', '&', '*', '{', '}', '$', '+', '[', ']' };
+
+	// if changing any length requirement, verify that existing users will not be
+	// refused authentication - see getUserObject.getUser, where it throws exception with
+	// error of "INVALID_ATTEMPT"
 	public static final int MIN_PW_LENGTH = 4;
 	public static final int MAX_PW_LENGTH = 20;
-
-	// if setting the MIN_NAME_LENGTH higher, verify that current users will not be
-	// refused login - see UserDAO.getUser
 	public static final int MIN_NAME_LENGTH = 4;
 	public static final int MAX_NAME_LENGTH = 15;
-	public static final char[] ILLEGAL_NAME_CHARACTER = { ' ', '#', '%', '^', '&', '*', '{', '}', '$' };
-
 	
+
+	/**
+	 * Makes a new Authenticator Object
+	 */
 	public Authenticator()
 	{
 		try
 		{
-			userDAO = new UserDAO();
+			userDAO = new UserDAO<T>();
 		}
 		catch (SQLException e)
 		{
@@ -39,18 +41,14 @@ public class Authenticator <T extends IsetUser>
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * This method takes a String and returns null if it is a legally formatted
+	 * Takes a String and returns null if it is a legally formatted
 	 * password, otherwise it returns a list of the problems it has.
-	 * 
-	 * @param enteredPassword - The password being checked.
-	 * @return List of problems found, or null if no problems found.
 	 */
 	public static ArrayList<PasswordError> checkPasswordLegality(String enteredPassword)
 	{
-		// new array list with space for 6 elements
-		ArrayList<PasswordError> errorList = new ArrayList<PasswordError>(7);
+		ArrayList<PasswordError> errorList = new ArrayList<PasswordError>();
 		int numUpper = 0, numLower = 0, numDigits = 0, numSpecial = 0, numIllegalChar = 0;
 		boolean isValidPassword = true;
 
@@ -141,10 +139,8 @@ public class Authenticator <T extends IsetUser>
 	}
 
 	/**
-	 * This method checks to see if a username is legally formatted. 
-	 * 
-	 * @param username The name being checked.
-	 * @return errorList or null
+	 * Takes a String and returns null if it is a legally formatted
+	 * username, otherwise it returns a list of the problems it has.
 	 */
 	public static ArrayList<UsernameError> checkUsernameLegality(String username)
 	{
@@ -191,24 +187,48 @@ public class Authenticator <T extends IsetUser>
 			return errorList;
 		}
 	}
-	
-	
+
+	/**
+	 * Makes a new user with an associated object.
+	 * @param enteredUsername - desired username
+	 * @param enteredPassword - desired password
+	 * @param enteredPwConfirm - password confirm	
+	 * @param object - an object of the type to be associated with the user. Not null.
+	 * @throws NewUserException - Exception which describes possible issues.
+	 */
 	public void createUser(String enteredUsername, String enteredPassword, String enteredPwConfirm, Object object) throws NewUserException
 	{
 		userDAO.createUser(enteredUsername, enteredPassword, enteredPwConfirm, object);
 	}
-	
+
+	/**
+	 * Reads and returns users associated Object from file.
+	 * 
+	 * @param enteredUsername - the username
+	 * @param enteredPassword - the password
+	 * @return The user's Object
+	 * @throws BadLoginException - Exception which details a failed object retrival. 
+	 */
 	public Object getUser(String enteredUsername, String enteredPassword) throws BadLoginException
 	{
 		return userDAO.getUserObject(enteredUsername, enteredPassword);
 	}
-	
+
+	/**
+	 * Deletes user's login credentials from database and associated object.
+	 * 
+	 * @param object - the user's associated object.
+	 */
 	public void deleteUser(T object)
 	{
 		userDAO.deleteUser(object);
 	}
-	
-	public void saveUser(T object)
+
+	/**
+	 * Writes user's object to a file.
+	 * @param object
+	 */
+	public void saveUserObject(T object)
 	{
 		userDAO.saveUserObject(object);
 	}

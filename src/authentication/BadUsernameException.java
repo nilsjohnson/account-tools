@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 /**
  * This Exception is thrown when a user attempts to make a new account with an
- * invalid user name. It contains an ArrayList with enums describing each case
- * why the user name might invalid. It contains a String describing the reason
- * the Exception was thrown.
+ * invalid user name. 
  * 
  * @author Nils
  *
@@ -19,7 +17,7 @@ public class BadUsernameException extends NewUserException
 		errors = new Enum<?>[errorList.size()];
 		
 		// String builder for message
-		StringBuilder temp = new StringBuilder();
+		StringBuilder temp = new StringBuilder("Desired username ");
 		
 		boolean shouldBreak = false;
 
@@ -28,16 +26,16 @@ public class BadUsernameException extends NewUserException
 			switch (errorList.get(i))
 			{
 			case HAS_ILLEGAL_CHAR:
-				temp.append("Has Invalid Character");
+				temp.append("has illegal character ");
 				break;
 			case TOO_LONG:
-				temp.append("Needs Lowercase ");
+				temp.append("is too long ");
 				break;
 			case TOO_SHORT:
-				temp.append("Needs Uppercase");
+				temp.append("is too short ");
 				break;
 			case UNAVAILABLE:
-				temp.append("Needs Number");
+				temp.append("is unavailable ");
 				break;
 			default:
 				this.message = "Illegal Username";
@@ -50,14 +48,7 @@ public class BadUsernameException extends NewUserException
 				break;
 			}
 
-			if (i >= 1 && i < errorList.size() && i != errorList.size() - 1)
-			{
-				temp.append(", ");
-			}
-			else if (i == errorList.size() - 1)
-			{
-				temp.append("and ");
-			}
+			appendPunctuation(temp, i, errorList.size());
 		}
 		if (!shouldBreak)
 		{

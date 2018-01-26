@@ -7,6 +7,11 @@ import java.sql.Statement;
 
 import authentication.Authenticator;
 
+/**
+ * Contains general DAO methods for communicating with a SQLlite db.
+ * @author Nils
+ *
+ */
 public abstract class DAO
 {
 	// for DB connection
@@ -73,5 +78,4 @@ public abstract class DAO
 			e.printStackTrace();
 		}
 	}
-
 }
