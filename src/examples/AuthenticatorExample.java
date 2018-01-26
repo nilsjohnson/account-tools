@@ -12,7 +12,7 @@ import authentication.UsernameError;
 public class AuthenticatorExample
 {
 	/**
-	 * This program demonstrates proper usage of the Authenticator object
+	 * This program demonstrates proper usage of the Authenticator Object
 	 * 
 	 * @author Nils Johnson
 	 */
@@ -69,7 +69,6 @@ public class AuthenticatorExample
 			authenticator.createUser(USERNAME, PASSWORD, PASSWORD, example);
 			System.out.println("Making of user entry and object successful.");
 		}
-		// catch any NewUserExceptions
 		catch (NewUserException e)
 		{
 			// get an array of Enums representing the problems and a message.
@@ -87,6 +86,7 @@ public class AuthenticatorExample
 					switch ((PasswordError) error)
 					{
 					case HAS_ILLEGAL_CHAR:
+						// do whatever you want here
 						break;
 					case MIS_MATCH:
 						break;
@@ -113,6 +113,7 @@ public class AuthenticatorExample
 					switch ((UsernameError) error)
 					{
 					case HAS_ILLEGAL_CHAR:
+						// do whatever you want here
 						break;
 					case TOO_LONG:
 						break;
