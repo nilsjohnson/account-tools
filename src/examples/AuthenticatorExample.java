@@ -18,11 +18,11 @@ public class AuthenticatorExample
 	 */
 	public static void main(String[] args)
 	{
-		// make authenticator object that works with your object. -> See
-		// ExampleUserObject
+		// make an Athenticator that works with your object. See ExampleUserObject
 		Authenticator<ExampleUserObject> authenticator = new Authenticator<>();
 
-		// sample login credentials. Change these to experiment.
+		// sample login credentials. Change these to experiment/understand exception handing.
+		// requirements can be adjusted by chaning constants in Authenticator.java.
 		final String USERNAME = "Dave";
 		final String PASSWORD = "!Pass123";
 
