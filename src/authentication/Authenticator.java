@@ -18,7 +18,7 @@ public class Authenticator<T extends IsetUser>
 	public static final char[] ILLEGAL_NAME_CHARACTER = { ' ', '#', '%', '^', '&', '*', '{', '}', '$', '+', '[', ']' };
 
 	// if changing any length requirement, verify that existing users will not be
-	// refused authentication - see getUserObject.getUser, where it throws exception with
+	// refused authentication - see UserDAO.getUser, where it throws exception with
 	// error of "INVALID_ATTEMPT"
 	public static final int MIN_PW_LENGTH = 4;
 	public static final int MAX_PW_LENGTH = 20;
